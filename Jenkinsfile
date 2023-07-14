@@ -36,8 +36,19 @@ pipeline {
       }
     }
     stage("Deploy") {
-      steps {
-        sh "echo 'Deploy'"
+      steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        sshPublisher(
+          continueOnError: false, failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: "remote_server",
+              verbose: true,
+              transfers: [
+                sshTransfer(execCommand: "touch test_file")
+              ]
+            )
+          ]
+        )
       }
     }
   }
