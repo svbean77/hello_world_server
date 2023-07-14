@@ -1,39 +1,43 @@
 pipeline {
   agent any
-    stages {
-      stage("CheckOut") {
-        steps {
-          git url: 'https://github.com/svbean77/shinhanDS_Academy_DevOps_Workspace.git',
-              branch: 'main'
-        }
+  environment {
+    GITHUB_REPO="https://github.com/svbean77/hello_world_server"
+    DOCKER_REPO="svbean77/hello_world_server"
+    VERSION=1.0
+  }
+  stages {
+    stage("CheckOut") {
+      steps {
+        git url: "$GITHUB_REPO"
+            branch: "main"
       }
-      stage("Code Build") {
-        steps {
-          sh "echo 'Code Build'"
-        }
-      }
-      stage("Unit Test") {
-        steps {
-          sh "echo 'Unit Test'"
-        }
-      }
-      stage("Docker Build") {
-        steps {
-          sh "echo 'Docker Build'"
-        }
-      }
-      stage("Docker Push") {
-        steps {
-          sh "echo 'Docker Push'"
-        }
-      }
-      stage("Deploy") {
-        steps {
-          sh "echo 'Deploy'"
-        }
-      }
-
     }
+    stage("Code Build") {
+      steps {
+        sh "echo 'Code Build'"
+      }
+    }
+    stage("Unit Test") {
+      steps {
+        sh "echo 'Unit Test'"
+      }
+    }
+    stage("Docker Build") {
+      steps {
+        sh "docker build -t $DOCKER_REPO:$VERSION ."
+      }
+    }
+    stage("Docker Push") {
+      steps {
+        sh "echo 'Docker Push'"
+      }
+    }
+    stage("Deploy") {
+      steps {
+        sh "echo 'Deploy'"
+      }
+    }
+  }
   post {
     success {
       slackSend (
