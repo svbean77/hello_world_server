@@ -25,6 +25,7 @@ pipeline {
     }
     stage("Docker Build") {
       steps {
+pipeline {
         sh "docker build -t $DOCKER_REPO:$VERSION ."
       }
     }
@@ -44,13 +45,14 @@ pipeline {
               configName: "remote_server",
               verbose: true,
               transfers: [
-                sshTransfer(execCommand: "docker pull $DOCKER_REPO"),
+                sshTransfer(execCommand: "docker pull $DOCKER_REPO:$VERSION"),
                 sshTransfer(execCommand: "docker ps -aq --filter 'name=hello_world_server' | xargs -r docker stop"),
                 sshTransfer(execCommand: "docker ps -aq --filter 'name=hello_world_server' | xargs -r docker rm"),
                 sshTransfer(execCommand: "docker run -d --name hello_world_server -p 8000:8000 $DOCKER_REPO:$VERSION")
               ]
             )
           ]
+pipeline {
         )
       }
     }
@@ -63,6 +65,7 @@ pipeline {
           message: "SUCCESS : Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]"
           )
     }
+pipeline {
     failure {
       slackSend (
           channel: "#랜덤",
