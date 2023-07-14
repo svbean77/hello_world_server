@@ -25,7 +25,6 @@ pipeline {
     }
     stage("Docker Build") {
       steps {
-pipeline {
         sh "docker build -t $DOCKER_REPO:$VERSION ."
       }
     }
@@ -52,7 +51,6 @@ pipeline {
               ]
             )
           ]
-pipeline {
         )
       }
     }
@@ -65,7 +63,6 @@ pipeline {
           message: "SUCCESS : Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]"
           )
     }
-pipeline {
     failure {
       slackSend (
           channel: "#랜덤",
